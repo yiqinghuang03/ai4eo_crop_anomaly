@@ -1,53 +1,69 @@
-from ssl_model.torchgeo_extractor import TorchGeoSSLExtractor
+import csv
+import os
+
 import numpy as np
-import yaml
 import torch
+import yaml
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+from scoring.knn import knn_scores
+from models.baselines import baselines
+from ssl_model.torchgeo_extractor import TorchGeoSSLExtractor
+from src.datamodule import Datamodule
+from src.plots import fig_anomaly_map, fig_score_hist
+
+
+def collect_images(loader):
+    images=[]
+    for batch in loader:
+        images.append(batch["image"].cpu())
+    return torch.cat(images, dim=0)
+
 
 def main():
-    #load configuration from YAML file
-    with open('configs/mvp.yaml',"r") as f:
+    with open("configs/mvp.yaml",encoding="utf-8") as f:
         cfg=yaml.safe_load(f)
-        
-    mode =cfg.get("run", {}).get("mode","full")
-  
 
-    out_dir=Path(cfg["results"]["output_dir"])
-    #load patches
-    dm=Sentinel2PatchDataModule(cfg)
+    ssl=cfg["ssl"]
+    k=cfg["score"]["k_neighbors"]
+
+    os.makedirs("results/tables", exist_ok=True)
+    os.makedirs("results/figures", exist_ok=True)
+
+    dm = Datamodule("configs/data.yaml")
     dm.setup()
 
-    train_samples=dm.get_patches(split="train")
-    test_samples=dm.get_patches(split="test")
-    
-    train_images=torch.stack([s["image"] for s in train_samples],dim=0)
-    test_images=torch.stack([s["image"] for s in test_samples],dim=0)
-    
-    train_meta=[s['metadata'] for s in train_samples]
-    test_meta=[s['metadata'] for s in test_samples]
-    # ndvi baseline scores
-    baseline_scores={}
-    ndvi_stats={}
-    if mode == "full" or "baseline_only":
-        baseline_result=run_baselines(test_images, test_meta, cfg)
-        baseline_scores=baseline_result['scores']
-        ndvi_stats=baseline_result['ndvi_statistics']
-    
-    # ssl
-    ssl_scores=np.array([])
-    
-    if mode == "full" or "ssl_only":
-        extractor= TorchGeoSSLExtractor(cfg)
-        extractor.fit(dm)
+    train_tensor = collect_images(dm.train_dataloader())
+    test_tensor = collect_images(dm.test_dataloader())
 
-       ...
+    field_ids = [0] * test_tensor.shape[0]
 
-    band_list=cfg["data"]["bands"]
-    red_idx=band(cfg["baseline"]["ndvi"]["red_band"])
-    nir_idx=band(cfg["baseline"]["ndvi"]["nir_band"])
-    ndvi_means=
+    ndvi_scores = baselines(test_tensor.numpy())["scores"]["ndvi"]
 
-   
-    field_id = cfg["visualization"]["field_id"]
-    
-    # knn scores
-    # visualization and proxy metrics
+    ex = TorchGeoSSLExtractor(cfg)
+    ex.fit(dm)
+
+    bs = ssl.get("batch_size", 32)
+    z_train = ex.extract_embeddings(train_tensor, batch_size=bs)
+    z_test = ex.extract_embeddings(test_tensor, batch_size=bs)
+
+    ssl_scores = knn_scores(z_test, z_train, k=k).numpy()
+
+    np.save("results/tables/baseline_scores.npy", ndvi_scores)
+    np.save("results/tables/ssl_scores.npy", ssl_scores)
+
+    with open("results/tables/metrics.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["model", "metric", "value"])
+        w.writerow(["baseline_ndvi", "mean_score", float(np.mean(ndvi_scores))])
+        w.writerow(["baseline_ndvi", "std_score", float(np.std(ndvi_scores))])
+        w.writerow(["ssl_knn", "mean_score", float(np.mean(ssl_scores))])
+        w.writerow(["ssl_knn", "std_score", float(np.std(ssl_scores))])
+
+    fig_score_hist(ndvi_scores, ssl_scores, "results/figures/fig_score_hist.png")
+    fig_anomaly_map(field_ids, ndvi_scores, ssl_scores, "results/figures/fig_anomaly_map.png")
+
+
+if __name__ == "__main__":
+    main()
