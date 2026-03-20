@@ -31,7 +31,7 @@ def main():
     os.makedirs("results/tables", exist_ok=True)
     os.makedirs("results/figures", exist_ok=True)
 
-    dm=Sentinel2DataModule("configs/data.yaml")
+    dm=Sentinel2DataModule()
     dm.setup()
 
     train_tensor = collect_images(dm.train_dataloader())
