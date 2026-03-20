@@ -4,7 +4,7 @@ import torch
 import yaml
 from lightning.pytorch import LightningDataModule
 from torch.utils.data import DataLoader
-from torchgeo.datasets import Sentinel2,stack_samples
+from torchgeo.datasets import EuroSAT,stack_samples
 from torchgeo.samplers import GridGeoSampler,RandomGeoSampler
 
 
@@ -31,7 +31,7 @@ class Sentinel2DataModule(LightningDataModule):
         self.test_aug=K.AugmentationSequential(K.Normalize(self.mean, self.std))
 
     def setup(self,stage=None):
-        self.dataset=Sentinel2(paths=self.root,bands=self.bands)
+        self.dataset=EuroSAT(paths="data/EuroSAT",download=False)
 
         self.train_sampler=RandomGeoSampler(
             self.dataset,
