@@ -39,7 +39,7 @@ def main():
 
     field_ids = [0] * test_tensor.shape[0]
 
-    ndvi_scores = baselines(test_tensor.numpy())["scores"]["ndvi"]
+    ndvi_scores=np.mean(test_tensor.numpy(),axis=(1,2,3))
 
     ex = TorchGeoSSLExtractor(cfg)
     ex.fit(dm)
