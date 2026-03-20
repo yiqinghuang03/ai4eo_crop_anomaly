@@ -12,7 +12,6 @@ class Sentinel2DataModule(LightningDataModule):
     def __init__(self):
         super().__init__()
         cfg=yaml.safe_load(open("data.yaml"))
-        self.root=cfg["root"]
         self.batch_size=cfg["batch_size"]
         self.num_workers=cfg["num_workers"]
         self.patch_size=cfg["patch_size"]
