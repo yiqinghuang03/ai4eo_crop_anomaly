@@ -25,7 +25,7 @@ def main():
     with open("data.yaml",encoding="utf-8") as f:
         cfg=yaml.safe_load(f)
 
-    k=cfg["score"]["k_neighbors"]
+    k=cfg["k"]
 
     os.makedirs("results/tables", exist_ok=True)
     os.makedirs("results/figures", exist_ok=True)
