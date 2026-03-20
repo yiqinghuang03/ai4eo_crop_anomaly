@@ -15,7 +15,7 @@ layers: 3
 batch_size: 32
 lr: 0.001
 temperature: 0.5
-k_neighbors: 5
+k: 5
 figures_dir: "results/figures"
 tables_dir: "results/tables"
 
