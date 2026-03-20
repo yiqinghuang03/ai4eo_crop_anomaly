@@ -29,7 +29,7 @@ class Sentinel2DataModule(LightningDataModule):
         )
         self.test_aug=K.AugmentationSequential(K.Normalize(self.mean, self.std))
 
-    def setup(self,stage):
+    def setup(self,stage=None):
         self.dataset=Sentinel2(paths=self.root,bands=self.bands)
 
         self.train_sampler=RandomGeoSampler(
