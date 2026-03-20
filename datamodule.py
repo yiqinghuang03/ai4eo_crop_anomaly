@@ -9,7 +9,7 @@ from torchgeo.samplers import GridGeoSampler,RandomGeoSampler
 
 
 class Sentinel2DataModule(LightningDataModule):
-    def __init__(self,config_path="configs/data.yaml"):
+    def __init__(self,config_path="data.yaml"):
         super().__init__()
         cfg=yaml.safe_load(open(config_path))
         self.root=cfg["root"]
