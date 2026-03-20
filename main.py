@@ -10,7 +10,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from knn import knn_scores
 from baselines import baselines
 from torchgeo_extractor import TorchGeoSSLExtractor
-from datamodule import Datamodule
+from datamodule import Sentinel2DataModule
 from plots import fig_anomaly_map, fig_score_hist
 
 
