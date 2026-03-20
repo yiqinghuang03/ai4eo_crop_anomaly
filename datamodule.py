@@ -16,6 +16,7 @@ class Sentinel2DataModule(LightningDataModule):
         self.num_workers=cfg["num_workers"]
         self.patch_size=cfg["patch_size"]
         self.step=cfg["step"]
+        self.root=cfg["root"]
         self.test_stride=self.patch_size
         self.bands=cfg["bands"]
         
