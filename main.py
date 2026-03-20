@@ -8,10 +8,10 @@ import yaml
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 from knn import knn_scores
-from models.baselines import baselines
-from ssl_model.torchgeo_extractor import TorchGeoSSLExtractor
-from src.datamodule import Datamodule
-from src.plots import fig_anomaly_map, fig_score_hist
+from baselines import baselines
+from torchgeo_extractor import TorchGeoSSLExtractor
+from datamodule import Datamodule
+from plots import fig_anomaly_map, fig_score_hist
 
 
 def collect_images(loader):
