@@ -31,7 +31,7 @@ class Sentinel2DataModule(LightningDataModule):
         self.test_aug=K.AugmentationSequential(K.Normalize(self.mean, self.std))
 
     def setup(self,stage=None):
-        self.dataset=EuroSAT(paths="data/EuroSAT",download=False)
+        self.dataset=EuroSAT(path="data/EuroSAT",download=False)
 
         self.train_sampler=RandomGeoSampler(
             self.dataset,
