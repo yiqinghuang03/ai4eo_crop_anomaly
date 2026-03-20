@@ -1,19 +1,47 @@
-root: "data/sentinel2"
-batch_size: 32
-num_workers: 2
-patch_size: 64
-step: 256
-bands:
-  - "B01"
-  - "B02"
-  - "B03"
-  - "B04"
-  - "B05"
-  - "B06"
-  - "B07"
-  - "B08"
-  - "B8A"
-  - "B09"
-  - "B10"
-  - "B11"
-  - "B12"
+# =============================================================================
+# 统一配置：数据 + SSL + 基线 + 打分 + 输出（main.py / Datamodule 共用）
+# =============================================================================
+
+data:
+  # Sentinel-2 L2A 数据根目录（相对项目根目录，或写绝对路径）
+  root: "data/sentinel2"
+  # 使用的波段（需与本地栅格一致；与 ssl.in_channels 数量一致最省事）
+  bands: ["B02", "B03", "B04", "B08", "B11", "B12"]
+  patch_size: 64
+  # RandomGeoSampler 每个 epoch 的采样次数
+  step: 256
+  # GridGeoSampler 滑动步长；不填则默认等于 patch_size
+  test_stride: 64
+  batch_size: 32
+  num_workers: 2
+  # Kornia Normalize（长度须等于 len(bands)）；不填则用默认 0.10 / 0.05
+  # normalize_mean: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+  # normalize_std: [0.05, 0.05, 0.05, 0.05, 0.05, 0.05]
+
+baseline:
+  method: "ndvi"
+
+ssl:
+  method: "simclr"
+  backbone: "resnet18"
+  in_channels: 6
+  output_dim: 128
+  hidden_dim: 128
+  crop_size: 64
+  layers: 3
+  batch_size: 32
+  lr: 0.001
+  temperature: 0.5
+  train:
+    enabled: false
+    epochs: 1
+
+score:
+  k_neighbors: 5
+
+results:
+  figures_dir: "results/figures"
+  tables_dir: "results/tables"
+
+sanity:
+  print_batch_shapes: false
