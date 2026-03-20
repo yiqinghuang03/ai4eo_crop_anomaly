@@ -10,7 +10,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from knn import knn_scores
 from baselines import baselines
 from torchgeo_extractor import TorchGeoSSLExtractor
-from datamodule import Sentinel2DataModule
+from torchgeo.datamodules import EuroSATDataModule
 from plots import fig_anomaly_map, fig_score_hist
 
 
@@ -31,7 +31,7 @@ def main():
     os.makedirs("results/tables", exist_ok=True)
     os.makedirs("results/figures", exist_ok=True)
 
-    dm=Sentinel2DataModule()
+    dm=EuroSATDataModule
     dm.setup()
 
     train_tensor = collect_images(dm.train_dataloader())
