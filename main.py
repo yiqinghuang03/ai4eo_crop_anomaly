@@ -22,7 +22,7 @@ def collect_images(loader):
 
 
 def main():
-    with open("configs/mvp.yaml",encoding="utf-8") as f:
+    with open("data.yaml",encoding="utf-8") as f:
         cfg=yaml.safe_load(f)
 
     ssl=cfg["ssl"]
