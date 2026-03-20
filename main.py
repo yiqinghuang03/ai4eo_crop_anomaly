@@ -25,7 +25,6 @@ def main():
     with open("data.yaml",encoding="utf-8") as f:
         cfg=yaml.safe_load(f)
 
-    ssl=cfg["ssl"]
     k=cfg["score"]["k_neighbors"]
 
     os.makedirs("results/tables", exist_ok=True)
@@ -44,11 +43,11 @@ def main():
     ex = TorchGeoSSLExtractor(cfg)
     ex.fit(dm)
 
-    bs = ssl.get("batch_size", 32)
-    z_train = ex.extract_embeddings(train_tensor, batch_size=bs)
-    z_test = ex.extract_embeddings(test_tensor, batch_size=bs)
+    bs = cf["batch_size"]
+    z_train = ex.extract_embeddings(train_tensor,batch_size=bs)
+    z_test = ex.extract_embeddings(test_tensor,batch_size=bs)
 
-    ssl_scores = knn_scores(z_test, z_train, k=k).numpy()
+    ssl_scores =knn_scores(z_test, z_train, k=k).numpy()
 
     np.save("results/tables/baseline_scores.npy", ndvi_scores)
     np.save("results/tables/ssl_scores.npy", ssl_scores)
