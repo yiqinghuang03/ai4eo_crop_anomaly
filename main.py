@@ -7,7 +7,7 @@ import yaml
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
-from scoring.knn import knn_scores
+from knn import knn_scores
 from models.baselines import baselines
 from ssl_model.torchgeo_extractor import TorchGeoSSLExtractor
 from src.datamodule import Datamodule
