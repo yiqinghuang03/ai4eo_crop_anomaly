@@ -11,6 +11,7 @@ from knn import knn_scores
 from baselines import baselines
 from torchgeo_extractor import TorchGeoSSLExtractor
 from torchgeo.datamodules import EuroSATDataModule
+from torchgeo.datasets import EuroSAT
 from plots import fig_anomaly_map, fig_score_hist
 
 
@@ -31,7 +32,7 @@ def main():
     os.makedirs("results/tables", exist_ok=True)
     os.makedirs("results/figures", exist_ok=True)
 
-    dm=EuroSATDataModule
+    dm=EuroSATDataModule(batch_size=cfg["batch_size"],num_workers=cfg["num_workers"],root=data/,download=True)
     dm.setup()
 
     train_tensor = collect_images(dm.train_dataloader())
