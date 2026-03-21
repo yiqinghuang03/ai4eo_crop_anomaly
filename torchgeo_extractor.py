@@ -17,8 +17,8 @@ class TorchGeoSSLExtractor:
         )
 
     def fit(self,datamodule):
-        ssl_cfg=self.cfg["ssl"]
-        train_cfg=cfg.get("train", {"enabled": False, "epochs": ssl_cfg.get("epochs", 5)})
+        ssl_cfg=self.cfg
+        train_cfg=cfg.get("train", {"enabled": False,"epochs":cfg.get("epochs", 5)})
         if not train_cfg.get("enabled", True):
             return
         trainer=Trainer(
@@ -38,7 +38,7 @@ class TorchGeoSSLExtractor:
                 x=images[i:i+batch_size].to(device)
                 out=self.task(x)
                 z=out[0]
-                z=torch.nn.functional.normalize(z, p=2, dim=1)
+                z=torch.nn.functional.normalize(z)
                 embs.append(z.cpu())
         if not embs:
             dim = int(self.cfg["ssl"].get("output_dim", 1))
