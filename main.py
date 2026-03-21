@@ -18,7 +18,7 @@ from plots import fig_anomaly_map, fig_score_hist
 def collect_images(loader):
     images=[]
     for batch in loader:
-        x=batch[0]
+        x=batch["image"]
         iamges.append(x)
     return torch.cat(images, dim=0)
 
