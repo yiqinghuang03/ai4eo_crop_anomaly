@@ -46,7 +46,7 @@ def main():
     ex = TorchGeoSSLExtractor(cfg)
     ex.fit(dm)
 
-    bs = cf["batch_size"]
+    bs = f["batch_size"]
     z_train = ex.extract_embeddings(train_tensor,batch_size=bs)
     z_test = ex.extract_embeddings(test_tensor,batch_size=bs)
 
