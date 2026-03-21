@@ -6,20 +6,19 @@ class TorchGeoSSLExtractor:
 
     def __init__(self,cfg):
         self.cfg=cfg
-        ssl_cfg=self.cfg["ssl"]
         self.task = SimCLRTask(
-            model=ssl_cfg["backbone"],
-            in_channels=ssl_cfg["in_channels"],
-            temperature=ssl_cfg["temperature"],
-            output_dim=ssl_cfg["output_dim"],
-            hidden_dim=ssl_cfg["hidden_dim"],
-            layers=ssl_cfg["layers"],
-            size=ssl_cfg["crop_size"]
+            model=cfg["backbone"],
+            in_channels=cfg["in_channels"],
+            temperature=cfg["temperature"],
+            output_dim=cfg["output_dim"],
+            hidden_dim=cfg["hidden_dim"],
+            layers=cfg["layers"],
+            size=cfg["crop_size"]
         )
 
     def fit(self,datamodule):
         ssl_cfg=self.cfg["ssl"]
-        train_cfg=ssl_cfg.get("train", {"enabled": False, "epochs": ssl_cfg.get("epochs", 5)})
+        train_cfg=cfg.get("train", {"enabled": False, "epochs": ssl_cfg.get("epochs", 5)})
         if not train_cfg.get("enabled", True):
             return
         trainer=Trainer(
