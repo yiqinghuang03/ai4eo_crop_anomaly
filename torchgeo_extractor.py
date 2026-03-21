@@ -18,7 +18,7 @@ class TorchGeoSSLExtractor:
 
     def fit(self,datamodule):
         ssl_cfg=self.cfg
-        train_cfg=self.cfg.get("train", {"enabled": False,"epochs":cfg.get("epochs", 5)})
+        train_cfg=self.cfg.get("train", {"enabled": False,"epochs":self.cfg.get("epochs", 5)})
         if not train_cfg.get("enabled", True):
             return
         trainer=Trainer(
