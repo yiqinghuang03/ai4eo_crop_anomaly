@@ -19,7 +19,7 @@ def collect_images(loader):
     images=[]
     for batch in loader:
         x=batch["image"]
-        iamges.append(x)
+        images.append(x)
     return torch.cat(images, dim=0)
 
 
