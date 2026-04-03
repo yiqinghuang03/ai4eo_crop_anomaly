@@ -1,8 +1,6 @@
 
-root: "data/sentinel2"
 bands: ["B02", "B03", "B04", "B08", "B11", "B12"]
 patch_size: 64
-step: 256
 test_stride: 64
 batch_size: 32
 num_workers: 2
@@ -10,12 +8,13 @@ backbone: "resnet18"
 in_channels: 6
 output_dim: 128
 hidden_dim: 128
-crop_size: 64
 layers: 3
 batch_size: 32
 lr: 0.001
 temperature: 0.5
 k: 5
+train_dir: data/train
+test_dir: data/test
 figures_dir: "results/figures"
 tables_dir: "results/tables"
 
