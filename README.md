@@ -1,4 +1,4 @@
-# ai4eo final project
+# Ai4eo Final Project
 
 ## project overview
 This project explores an unsupervised anomaly detection pipeline for Earth Observation data.  
@@ -41,13 +41,13 @@ The project uses Sentinel-2 satellite imagery.
 - sufficient spatial information 
 - openly accessible EO data for researchers 
 
-## current Status
+## current status
 
 Currently the project has reached the stage of a defined pipeline and partial implementation. However:
 - The code is currently under debugging and is not yet fully executable end-to-end.
 - The repository is not fully up to date, as some recent local changes (still in experimenting) have not been synchronized.
 
-## planned Next Steps
+## planned future modification
 
 1. Generate anomaly scores for all patches
 2. Visualization from patch-level into spatial maps with relative relations between neighbor fields. 
