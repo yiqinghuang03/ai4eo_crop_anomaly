@@ -26,7 +26,7 @@ The main goal is to temporally identify potentially abnormal regions within crop
 5. **interpretation/ visualization**
    - The expected final output is a spatial anomaly map showing which regions of a field may require further inspection
 
-## data Source
+## data source
 The project uses Sentinel-2 satellite imagery.
 
 ### bands
